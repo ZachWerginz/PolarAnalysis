@@ -3,7 +3,8 @@ import numpy as np
 import datetime
 import matplotlib.pyplot as plt
 
-data = pd.read_csv('1PF_data1976-01-13_1993-04-09.csv')
+data = pd.read_csv('imb75_PF_1976-01-13_1993-04-09.csv')
+
 pfNorth = []
 pfSouth = []
 Y = []
@@ -16,7 +17,7 @@ for i in range(len(data)):
     M.append(data.iat[i,2])
     D.append(data.iat[i,3])
     pfNorth.append(data.iat[i,10])
-    pfSouth.append(data.iat[i,19])
+    pfSouth.append(data.iat[i,20])
 
 #Getting Date Axis
 for i in range( 0, len(Y) ):
@@ -35,7 +36,7 @@ def pf1():
 #Plotting Southern Hemisphere
 def pf2():
     plt.subplot(212)
-    plt.plot(date, pfSouth, 'ro')
+    plt.plot(date, pfSouth, 'ro' )
     plt.axis([1976, 1993.5, -1e23, 1e23])
     plt.xlabel('Year')
     plt.ylabel('Total Signed Flux (Mx)')
