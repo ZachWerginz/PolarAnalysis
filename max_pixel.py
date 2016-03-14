@@ -3,44 +3,35 @@ import numpy as np
 import datetime
 import matplotlib.pyplot as plt
 
-data = pd.read_csv('imb85_PF_1976-01-13_1993-04-09.csv')
-pfNorth = []
-pfSouth = []
-maxNorth = []
-maxSouth = []
+data = pd.read_csv('PF_data1976-01-13_1993-04-09.csv')
 
-for i in range(len(data) ):
-    maxNorth.append( data.iat[i, 15] )
-    maxSouth.append( data.iat[i, 25] )
-    pfNorth.append( abs(data.iat[i, 10]) )
-    pfSouth.append( abs(data.iat[i, 20]) )
+pfNorth = np.array(data.sflux_n)
+pfSouth = np.array(data.sflux_s)
+max_pxflux_n = np.array(data.max_pxflux_n)
+max_pxflux_s = np.array(data.max_pxflux_s)
 
-xmin = min( [min(maxNorth), min(maxSouth)] )
-xmax = max( [max(maxNorth), max(maxSouth)] )
+ClrTh = 2.5e20
+inxNg = np.array(np.where(max_pxflux_n > ClrTh)[0])
+inxNs = np.array(np.where(max_pxflux_n <= ClrTh)[0])
 
-ymin = min( [min(pfNorth), min(pfSouth)] )
-ymax = max( [max(pfNorth), max(pfSouth)] )
-
-xmin = xmin - .3*xmin
-xmax = xmax + .3*xmax
-ymin = ymin - .3*ymin
-ymax = ymax + .3*ymax
+inxSg = np.array(np.where(max_pxflux_s > ClrTh)[0])
+inxSs = np.array(np.where(max_pxflux_s <= ClrTh)[0])
 
 #Plotting Northern Hemisphere
 def pf1():
     plt.subplot(211)
-    plt.plot(maxNorth, pfNorth, 'bo')
-    plt.axis([-xmin, xmax, ymin, ymax])
-    plt.xlabel('Max Pixel Flux')
+    plt.plot(max_pxflux_n[inxNs], pfNorth[inxNs], 'b.')
+    plt.plot(max_pxflux_n[inxNg], pfNorth[inxNg], 'm.')
+    plt.xlabel('Max abs Unsigned Pixel')
     plt.ylabel('Total Signed Flux (Mx)')
     plt.title('North Pole (above 65^o)')
 
 #Plotting Southern Hemisphere
 def pf2():
     plt.subplot(212)
-    plt.plot(maxSouth, pfSouth, 'ro' )
-    plt.axis([-xmin, xmax, ymin, ymax])
-    plt.xlabel('Max Pixel Flux')
+    plt.plot(max_pxflux_s[inxSs], pfSouth[inxSs], 'r.' )
+    plt.plot(max_pxflux_s[inxSg], pfSouth[inxSg], 'g.' )
+    plt.xlabel('Max abs Unsigned Pixel')
     plt.ylabel('Total Signed Flux (Mx)')
     plt.title('South Pole (below 65^o)')
 
