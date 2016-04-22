@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 def pf1(c):
     plt.subplot(211)
     plt.plot(date, normflux_n, color = c, marker = '.', linestyle = 'None')
-    plt.axis([1976, 2017, -3e22, 3e22])
+    #plt.axis([1976, 2017, -3e22, 3e22])
     plt.xlabel('Year')
     plt.ylabel('Total Signed Flux (Mx)')
     plt.title('North Pole (above $65^\circ$)')
@@ -16,15 +16,15 @@ def pf1(c):
 def pf2(c):
     plt.subplot(212)
     plt.plot(date, normflux_s, color = c, marker = '.', linestyle = 'None')
-    plt.axis([1976, 2017, -3e22, 3e22])
+    #plt.axis([1976, 2017, -3e22, 3e22])
     plt.xlabel('Year')
     plt.ylabel('Total Signed Flux (Mx)')
     plt.title('South Pole (below $65^\circ$)')
 
 
-files = ["PF_data1976-01-13_1993-04-09.csv", "PF_data1996-01-01_2011-04-11.csv","PF_data2010-04-08_2016-04-08.csv"]
-carr = ['red', 'green', 'blue']
-data = [pd.read_csv(files[0]), pd.read_csv(files[1]), pd.read_csv(files[2])]
+files = ["PF_data1976-01-13_1993-04-09.csv", "PF_data1992-05-03_1999-12-30.csv", "PF_data1996-01-01_2011-04-11.csv","PF_data2010-04-08_2016-04-08.csv"]
+carr = ['red', 'yellow', 'green', 'blue']
+data = [pd.read_csv(files[0]), pd.read_csv(files[1]), pd.read_csv(files[2]), pd.read_csv(files[3])]
 j = 0
 
 for file in data:
