@@ -3,22 +3,30 @@ import numpy as np
 import datetime
 import matplotlib.pyplot as plt
 
-data = pd.read_csv('PF_data1992-05-03_1999-12-30.csv')
+deg_lim = 75
 
-pfNorth = np.array(data.unsfluxc_n)/100
-pfSouth = np.array(data.unsfluxc_s)/100
-Y = np.array(data.year)
-M = np.array(data.month)
-D = np.array(data.day)
+data1 = pd.read_csv('PF_data1996-01-01_2011-04-11.csv')
+data2 = pd.read_csv('PF_1996-04-14_2011-04-11_uncertainty.csv')
+
+pfNorth_IDL = np.abs(np.array(data1.sfluxc_n))
+pfSouth_IDL = np.abs(np.array(data1.sfluxc_s))
+pfNorth_PY = np.array(data2.sfluxc_n_v)
+pfSouth_PY = np.array(data2.sfluxc_s_v)
+Y = np.array(data1.year)
+M = np.array(data1.month)
+D = np.array(data1.day)
 date = []
-max_pxf_n = np.array(data.max_pxf_n)
-max_pxfc_n = np.array(data.max_pxfc_n)
-max_pxf_s = np.array(data.max_pxf_s)
-max_pxfc_s = np.array(data.max_pxfc_s)
-visarea_n = np.array(data.visarea_n)
-visarea_s = np.array(data.visarea_s)
-maxarea_n = np.nanmax(visarea_n)
-maxarea_s = np.nanmax(visarea_s)
+#max_pxf_n = np.array(data.max_pxf_n)
+#max_pxfc_n = np.array(data.max_pxfc_n)
+#max_pxf_s = np.array(data.max_pxf_s)
+#max_pxfc_s = np.array(data.max_pxfc_s)
+visarea_n_IDL = np.array(data1.visarea_n)
+visarea_s_IDL = np.array(data1.visarea_s)
+visarea_n_PY = np.array(data2.visarea_n_v)
+visarea_s_PY = np.array(data2.visarea_s_v)
+#maxarea_n = np.nanmax(visarea_n)
+#maxarea_s = np.nanmax(visarea_s)
+maxarea = 2*np.pi*6.95508e10**2*(1-np.cos(np.deg2rad(90-deg_lim)))
 
 #Getting Date Axis
 for i in range( 0, len(Y) ):
@@ -27,8 +35,21 @@ for i in range( 0, len(Y) ):
 
 date = np.array(date)
 
-normflux_n = pfNorth*maxarea_n/visarea_n
-normflux_s = pfSouth*maxarea_s/visarea_s
+ind1 = np.unique(data1.mdi_i, return_index=True)
+ind2 = np.unique(data2.md, return_index=True)
+
+mask1 = np.in1d(ind1[0], ind2[0])
+mask2 = np.in1d(ind2[0], ind1[0])
+
+
+
+normflux_n_IDL = pfNorth_IDL*maxarea/visarea_n_IDL
+normflux_s_IDL = pfSouth_IDL*maxarea/visarea_s_IDL
+normflux_n_PY = pfNorth_PY*maxarea/visarea_n_PY
+normflux_s_PY = pfSouth_PY*maxarea/visarea_s_PY
+
+
+
 
 #Extract bad pixels
 #ClrTh = 3.5e20
@@ -43,9 +64,8 @@ normflux_s = pfSouth*maxarea_s/visarea_s
 #Plotting Northern Hemisphere
 def pf1():
     plt.subplot(211)
-    plt.plot(date, normflux_n, 'b.')
-    plt.plot(date, normflux_n, 'm.')
-    #plt.axis([1976, 2017, -3e22, 3e22])
+    plt.plot(normflux_n_IDL[ind1[1][mask1]], normflux_n_PY[ind2[1][mask2]], 'b.')
+    #plt.axis([1996, 2011, 0, 1.5e22])
     plt.xlabel('Year')
     plt.ylabel('Total Signed Flux (Mx)')
     plt.title('North Pole (above $65^\circ$)')
@@ -53,9 +73,8 @@ def pf1():
 #Plotting Southern Hemisphere
 def pf2():
     plt.subplot(212)
-    plt.plot(date, normflux_s, 'r.' )
-    plt.plot(date, normflux_s, 'g.')
-    #plt.axis([1976, 2017, -3e22, 3e22])
+    plt.plot(normflux_s_IDL[ind1[1][mask1]], normflux_s_PY[ind2[1][mask2]], 'r.')
+    #plt.axis([1996, 2011, 0, 1.5e22])
     plt.xlabel('Year')
     plt.ylabel('Total Signed Flux (Mx)')
     plt.title('South Pole (below $65^\circ$)')
