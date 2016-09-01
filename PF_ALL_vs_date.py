@@ -2,7 +2,7 @@
 each a different color."""
 import pandas as pd
 import numpy as np
-import datetime
+import datetime as dt
 import matplotlib.pyplot as plt
 from uncertainty import Measurement as M
 
@@ -10,7 +10,7 @@ from uncertainty import Measurement as M
 def pf1(c):
     plt.subplot(211)
     plt.plot(date, normflux_n, color = c, marker = '.', linestyle = 'None')
-    plt.axis([dt.datetime(1976,1,1), dt.datetime(2012,1,1), -3e22, 3e22])
+    plt.axis([dt.datetime(1976,1,1), dt.datetime(2016,7,5), -3e22, 3e22])
     plt.xlabel('Year')
     plt.ylabel('Total Signed Flux (Mx)')
     plt.title('North Pole (above $65^\circ$)')
@@ -19,13 +19,13 @@ def pf1(c):
 def pf2(c):
     plt.subplot(212)
     plt.plot(date, normflux_s, color = c, marker = '.', linestyle = 'None')
-    plt.axis([dt.datetime(1976,1,1), dt.datetime(2012,1,1), -3e22, 3e22])
+    plt.axis([dt.datetime(1976,1,1), dt.datetime(2016,7,5), -3e22, 3e22])
     plt.xlabel('Year')
     plt.ylabel('Total Signed Flux (Mx)')
     plt.title('South Pole (below $65^\circ$)')
 
 
-files = ['512.h5', 'SPMG.h5', 'MDI.h5']
+files = ['512.h5', 'SPMG.h5', 'MDI.h5', 'hmi.h5']
 #files = ["PF_data1976-01-13_1993-04-09.csv", "PF_data1976-01-13_1993-04-11.csv"]
 carr = ['red', 'yellow', 'green', 'blue']
 #data = [pd.read_csv(files[0]), pd.read_csv(files[1]), pd.read_csv(files[2]), pd.read_csv(files[3])]
